@@ -1,48 +1,51 @@
 # Roadmap
 
-## Phase 0 — Fundament
+## Phase 0 — Governance and reproducibility
 
-- [x] Repositorystruktur und Statussystem anlegen
-- [x] Deterministischen Atlasgenerator hinzufügen
-- [x] Baseline-Verifikator hinzufügen
-- [ ] Claim-Schema stabilisieren
-- [ ] Zitier- und Beitragsrichtlinien ergänzen
+- [x] repository structure and status system
+- [x] deterministic atlas generator
+- [x] exhaustive Core verifier
+- [x] claim registry expanded to 18 Core claims
+- [x] novelty ledger separated from mathematical verification
+- [x] citation/contribution/security files retained
 
-## Phase 1 — Vollständiger Atlas
+## Phase A — Complete static atlas
 
-- [ ] Alle 360 Klassen als maschinenlesbare Tabelle erzeugen
-- [ ] GCD-Strata und CRT-Koordinaten vollständig beschreiben
-- [ ] Idempotente, Nilpotente und reguläre Elemente zertifizieren
-- [ ] Invarianten und Prüfsummen versionieren
+- [x] generate all 360 residue rows with CRT, gcd, unit order, powers, regular/nilpotent tags
+- [x] generate all 24 GCD strata
+- [ ] add ideal/annihilator lattice table
+- [ ] add compressed support-sector multiplication tables
+- [ ] add subgroup lattice of \(U(360)\)
 
-## Phase 2 — Einheiten und Dynamik
+## Phase B — Primes and composites
 
-- [ ] Struktur von `(Z/360Z)^×` explizit herleiten
-- [ ] Potenzbilder und Fasern für relevante Exponenten tabellieren
-- [ ] Funktionalgraphen der Quadrat- und Kubusabbildung klassifizieren
-- [ ] Affine Aktionen katalogisieren
+- [x] MOD-30 wheel and 12 lifts
+- [x] exact admissibility formula for finite prime-offset patterns
+- [x] exponent-gcd classification of possible unit residues of factorizations
+- [ ] prime-square, semiprime, squarefree, \(\omega\), and \(\Omega\) atlases
+- [ ] compare theoretical residue support with actual primes/semiprimes up to controlled cutoffs
+- [ ] build prime-gap relation atlas by \(\gcd(h,360)\)
 
-## Phase 3 — Primzahlen und Komposite
+## Phase C — Dynamics
 
-- [ ] Primzahlfähige Klassen von endlichen Ausnahmen trennen
-- [ ] Primzahlpotenzen und Tupelmuster modulo 360 untersuchen
-- [ ] Semiprime, Quadratfreiheit und Faktorisierungsreste kartieren
-- [ ] Experimentelle Aussagen klar von Sätzen trennen
+- [x] power-image sizes through exponent 24
+- [ ] full functional graphs for \(x^2,x^3,x^5,x^6,x^{12},x^{13}\)
+- [ ] fiber-size stratification by GCD/support sector
+- [ ] translation-plus-power maps and exact ranks
 
-## Phase 4 — Harmonische Struktur
+## Phase D — Harmonic and graph structure
 
-- [ ] Additive Fourierbasis dokumentieren
-- [ ] Dirichlet-Charaktere nach Leitern und Primitivität ordnen
-- [ ] Ramanujan- und Gaußsummen exakt berechnen
-- [ ] Verbindung zu Graphspektren prüfen
+- [x] GCD relation graphs and Ramanujan eigenvalues
+- [ ] full 24x24 Bose–Mesner/intersection-number table
+- [ ] compare additive Fourier strata with multiplicative character strata
+- [ ] Gauss-sum bridge between additive and multiplicative characters
 
-## Phase 5 — Prior Art
+## Phase E — Discovery program
 
-- [ ] Suchprotokolle pro Claim führen
-- [ ] Primärquellen und Standardreferenzen erfassen
-- [ ] Unabhängige Reproduktion dokumentieren
-- [ ] `NEW` nur nach abgeschlossenem Audit vergeben
+- [ ] identify quantities not forced by CRT, the unit-group isomorphism type, or simple sieve admissibility
+- [ ] re-audit historical double-hexagon/affine/operator findings
+- [ ] run targeted prior-art searches only after a theorem is isolated
 
-## Release-Kriterien
+## Release criteria
 
-Ein Release benötigt reproduzierbare Daten, grüne Verifikation, aktualisierte Claims, dokumentierte offene Fragen und einen eingefrorenen Prior-Art-Stand.
+A release requires regenerated data with zero diff, a green exhaustive verifier, updated claims/status, documented open questions, and a frozen prior-art snapshot.

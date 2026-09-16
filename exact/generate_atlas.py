@@ -1,85 +1,68 @@
 #!/usr/bin/env python3
-"""Generate a deterministic atlas for Z/360Z using only the standard library."""
-
-from __future__ import annotations
-
 import csv
 import json
-from math import gcd
+import math
 from pathlib import Path
 
-MODULUS = 360
-OUT_DIR = Path(__file__).resolve().parents[1] / "atlas" / "000-359"
+N=360
+ROOT=Path(__file__).resolve().parents[1]
+DATA=ROOT/'data'
+DATA.mkdir(exist_ok=True)
 
-
-def is_idempotent(a: int) -> bool:
-    return pow(a, 2, MODULUS) == a
-
-
-def nilpotency_index(a: int) -> int | None:
-    x = a % MODULUS
-    for k in range(1, 13):
-        if x == 0:
+def order_mod(a):
+    if math.gcd(a,N)!=1:
+        return ''
+    x=1
+    for k in range(1,13):
+        x=x*a%N
+        if x==1:
             return k
-        x = (x * a) % MODULUS
-    return None
+    raise AssertionError(a)
 
+def is_nilpotent(x):
+    y=x%N
+    for _ in range(1,5):
+        if y==0:
+            return True
+        y=y*x%N
+    return False
 
-def regular_witness(a: int) -> int | None:
-    for x in range(MODULUS):
-        if (a * a * x - a) % MODULUS == 0:
-            return x
-    return None
+def support_label(e):
+    bits=(e%8!=0,e%9!=0,e%5!=0)
+    return ''.join(p for p,b in zip(('2','3','5'),bits) if b) or 'empty'
 
+fields=['r','gcd360','mod8','mod9','mod5','mod30','prime_capable','unit_order',
+        'mirror','square','cube','pow4','pow6','pow12','pow13','support_idempotent',
+        'support','regular','nilpotent']
+with (DATA/'residue-atlas.csv').open('w',newline='',encoding='utf-8') as f:
+    w=csv.DictWriter(f,fieldnames=fields)
+    w.writeheader()
+    for r in range(N):
+        p12=pow(r,12,N); p13=pow(r,13,N)
+        w.writerow({
+            'r':r,'gcd360':math.gcd(r,N),'mod8':r%8,'mod9':r%9,'mod5':r%5,
+            'mod30':r%30,'prime_capable':int(math.gcd(r,N)==1),'unit_order':order_mod(r),
+            'mirror':(-r)%N,'square':pow(r,2,N),'cube':pow(r,3,N),'pow4':pow(r,4,N),
+            'pow6':pow(r,6,N),'pow12':p12,'pow13':p13,'support_idempotent':p12,
+            'support':support_label(p12),'regular':int(p13==r),'nilpotent':int(is_nilpotent(r))
+        })
 
-def multiplicative_order(a: int) -> int | None:
-    if gcd(a, MODULUS) != 1:
-        return None
-    x = 1
-    for k in range(1, 13):
-        x = (x * a) % MODULUS
-        if x == 1:
-            return k
-    raise RuntimeError(f"order bound failed for {a}")
+def phi(m):
+    return sum(math.gcd(a,m)==1 for a in range(1,m+1))
 
+divs=[d for d in range(1,N+1) if N%d==0]
+with (DATA/'gcd-strata.csv').open('w',newline='',encoding='utf-8') as f:
+    w=csv.writer(f); w.writerow(['d','size','phi_360_over_d'])
+    for d in divs:
+        size=sum(math.gcd(x,N)==d for x in range(N))
+        w.writerow([d,size,phi(N//d)])
+with (DATA/'relation-strata.csv').open('w',newline='',encoding='utf-8') as f:
+    w=csv.writer(f); w.writerow(['d','degree_per_vertex','ordered_pairs'])
+    for d in divs:
+        degree=sum(math.gcd(t,N)==d for t in range(N))
+        w.writerow([d,degree,N*degree])
 
-def record(a: int) -> dict[str, object]:
-    witness = regular_witness(a)
-    return {
-        "residue": a,
-        "gcd_360": gcd(a, MODULUS),
-        "mod_8": a % 8,
-        "mod_9": a % 9,
-        "mod_5": a % 5,
-        "unit": gcd(a, MODULUS) == 1,
-        "prime_capable_gt_5": gcd(a, MODULUS) == 1,
-        "idempotent": is_idempotent(a),
-        "nilpotency_index": nilpotency_index(a),
-        "von_neumann_regular": witness is not None,
-        "regular_witness": witness,
-        "multiplicative_order": multiplicative_order(a),
-        "square": pow(a, 2, MODULUS),
-        "cube": pow(a, 3, MODULUS),
-    }
-
-
-def main() -> None:
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    rows = [record(a) for a in range(MODULUS)]
-    json_path = OUT_DIR / "atlas.json"
-    csv_path = OUT_DIR / "atlas.csv"
-
-    json_path.write_text(
-        json.dumps({"modulus": MODULUS, "records": rows}, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    with csv_path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
-        writer.writeheader()
-        writer.writerows(rows)
-
-    print(f"Wrote {len(rows)} records to {json_path} and {csv_path}")
-
-
-if __name__ == "__main__":
-    main()
+units=[x for x in range(N) if math.gcd(x,N)==1]
+power={str(k):sorted({pow(x,k,N) for x in units}) for k in range(1,13)}
+(DATA/'unit-power-images.json').write_text(json.dumps(power,indent=2)+'\n',encoding='utf-8')
+print('generated data/residue-atlas.csv, gcd-strata.csv, relation-strata.csv, unit-power-images.json')

@@ -1,19 +1,31 @@
-# Prior Art
+# Prior-art ledger
 
-## Quellenregister
+This is a living bibliography, not a novelty certificate.
 
-| Schlüssel | Vollständige Referenz | Typ | Relevante Claims | Geprüft am |
-|---|---|---|---|---|
-| — | — | — | — | — |
+## Regular residues
 
-## Suchprotokolle
+László Tóth, **“Regular integers modulo n”**, arXiv:0710.1936 (2007).
 
-Für jede Neuheitsfrage werden Datenbank, Datum, exakte Suchanfrage, Filter, relevante Treffer und nicht zugängliche Quellen notiert.
+Relevant point: regular residues modulo a prime power are controlled by the zero/unit local alternatives, and the counting formula yields
 
-## Qualitätsregeln
+\[
+\varrho(360)=(\varphi(8)+1)(\varphi(9)+1)(\varphi(5)+1)=175.
+\]
 
-- Primärquellen vor Sekundärzitaten bevorzugen.
-- Einen allgemeinen Satz suchen, nicht nur die Formulierung für Modul 360.
-- Computergestützte Datenbanken nicht mit mathematischem Beweis verwechseln.
-- Fehlende Treffer sind kein Neuheitsbeweis.
-- Bibliografische Angaben vor Status `NEW` unabhängig prüfen.
+URL: https://arxiv.org/abs/0710.1936
+
+## Integral / GCD circulant graphs
+
+Wasin So, **“Integral circulant graphs”**, *Discrete Mathematics* 306 (2006), 153–158.
+DOI: 10.1016/j.disc.2005.11.006
+
+Relevant point: circulant spectra are obtained from roots-of-unity sums; GCD-defined connection sets lead naturally to Ramanujan sums. Therefore the 24 GCD-relation/Fourier layer is classical background, not a novelty claim.
+
+URL: https://doi.org/10.1016/j.disc.2005.11.006
+
+## To audit next
+
+- finite commutative regular semigroups / Clifford semigroups;
+- exact semigroup Fourier decomposition of the MOD-360 regular skeleton;
+- literature specifically using \(n=360\) as a worked semigroup example;
+- congruence-subgroup and cyclotomic formulations of the double hexagon.

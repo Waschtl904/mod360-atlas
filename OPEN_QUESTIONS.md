@@ -1,11 +1,15 @@
 # Open Questions
 
-| ID | Frage | Bereich | Status | Nächster Schritt |
-|---|---|---|---|---|
-| OQ-001 | Welche Potenzabbildungen auf den Einheiten liefern isomorphe Funktionalgraphen? | Dynamik | offen | lokale Komponenten modulo 8, 9 und 5 vergleichen |
-| OQ-002 | Welche GCD-Strata sind unter ausgewählten affinen Aktionen invariant? | Atlas/Graphen | offen | Orbits exakt enumerieren |
-| OQ-003 | Welche spektralen Größen der Cayley-Graphen lassen sich direkt durch Ramanujan-Summen ausdrücken? | Harmonik | offen | Adjazenzspektren symbolisch vergleichen |
-| OQ-004 | Welche beobachteten Primzahltupel-Muster sind nur lokale Zulässigkeitsbedingungen? | Primzahlen | offen | admissibility von Häufigkeitsbehauptungen trennen |
-| OQ-005 | Welche Atlas-Darstellung ist für Menschen und Programme zugleich am stabilsten? | Methodik | offen | CSV, JSON und Einzelseiten evaluieren |
+| ID | Question | Area | Next step |
+|---|---|---|---|
+| OQ-001 | After quotienting out CRT and ordinary unit-group structure, what is the strongest remaining MOD-360-specific theorem? | global structure | isolate candidate theorem and audit prior art |
+| OQ-002 | Can the additive 24-stratum GCD association scheme and the multiplicative character decomposition be joined by a canonical small transform? | harmonic/algebraic | compare additive and multiplicative character tables |
+| OQ-003 | Which factorization types show nontrivial residue bias after the uniform group-theoretic baseline is removed? | composites | build semiprime/squarefree/\(\omega\)/\(\Omega\) atlases |
+| OQ-004 | Can the double hexagon \(Q=U(360)^2\), \(C=1+(60)\) be characterized by a universal property inside the ring rather than by enumeration? | units/ring | search internal characterizations |
+| OQ-005 | What is the complete functional-graph taxonomy of the main power maps on all 360 residues? | dynamics | enumerate \(x^2,x^3,x^5,x^6,x^{12},x^{13}\) |
+| OQ-006 | What new information appears when prime/semiprime occurrence data are conditioned on the fine 12-fold lifts over MOD 30? | primes/composites | compare empirical data only after theoretical baselines are fixed |
+| OQ-007 | Is there a concise algebraic object that simultaneously contains the GCD relation scheme, support idempotents, and unit-power lattice without merely restating CRT? | synthesis | formulate candidate universal object |
+| OQ-008 | Which GCD strata are invariant under selected affine and regularized affine actions? | graphs/actions | exact orbit enumeration |
+| OQ-009 | Which power maps on the units have isomorphic functional graphs, and which distinctions survive the abstract group type? | dynamics | local CRT comparison modulo 8,9,5 |
 
-Offene Fragen sind keine Claims. Sobald eine falsifizierbare Aussage entsteht, erhält sie eine Claim-ID.
+Open questions are not claims. Once a falsifiable theorem statement emerges, it receives an `M360-...` claim ID.
