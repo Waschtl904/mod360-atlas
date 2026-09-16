@@ -120,3 +120,18 @@ The reference scripts use only the Python standard library.
 ## Citation
 
 Until a formal release is archived, cite the repository URL together with the exact commit SHA and access date. `CITATION.cff` is retained as the machine-readable citation record.
+
+## Finite-window extension: actual primes and composites
+
+The [positive-integer census V1](primes/integer-census-v1.md) counts every
+integer from 1 to 1,000,000 in its MOD-360 class. It includes semiprimes,
+squarefree integers, prime powers, smallest-factor attribution, and the
+eight 12-lift MOD-30 fibers. This is an exact finite dataset, not an
+asymptotic or novelty claim; Core V3 is retained unchanged.
+
+```bash
+python exact/generate_integer_census.py --check
+python exact/verify_integer_census.py --check
+```
+
+See [the audit request](audit/INTEGER_CENSUS_V1.md) for scope and remaining review.

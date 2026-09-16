@@ -13,3 +13,10 @@
 | OQ-009 | Which power maps on the units have isomorphic functional graphs, and which distinctions survive the abstract group type? | dynamics | local CRT comparison modulo 8,9,5 |
 
 Open questions are not claims. Once a falsifiable theorem statement emerges, it receives an `M360-...` claim ID.
+
+## Finite-window progress, 2026-09-16
+
+OQ-003 and OQ-006 now have a first [integer census](primes/integer-census-v1.md)
+on `1..1000000`: all 360 rows, semiprimes, squarefree/proper-power counts,
+smallest-factor attribution and 12-lift vectors. Both questions remain open
+for persistent bias or extra information beyond a single bounded dataset.

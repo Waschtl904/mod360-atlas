@@ -1,0 +1,20 @@
+name: integer-census
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-census:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python exact/generate_integer_census.py --check
+      - run: python exact/verify_integer_census.py --check
+      - run: git diff --exit-code -- data/integer-census-v1 certificates/integer-census-v1.json
