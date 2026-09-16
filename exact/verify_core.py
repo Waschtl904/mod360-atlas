@@ -7,7 +7,7 @@ from pathlib import Path
 
 N=360
 ROOT=Path(__file__).resolve().parents[1]
-CERT=ROOT/'certificates'/'core-v1.json'
+CERT=ROOT/'certificates'/'core-v2.json'
 
 def phi(m):
     return sum(math.gcd(a,m)==1 for a in range(1,m+1))
@@ -31,6 +31,12 @@ def subgroup(gens):
                     s.add(b); changed=True
     return s
 
+def ideal(d):
+    return {(d*j)%N for j in range(N//math.gcd(d,N))}
+
+def ann_set(S):
+    return {a for a in range(N) if all(a*x%N==0 for x in S)}
+
 R=list(range(N))
 G=[x for x in R if math.gcd(x,N)==1]
 assert len(G)==96
@@ -50,12 +56,75 @@ for d in D:
     a=next(iter(S))
     assert {u*a%N for u in G}==S
 
+# Complete ideal/annihilator dictionary.
+Id={d:ideal(d) for d in D}
+assert len({frozenset(v) for v in Id.values()})==24
+for d in D:
+    I=Id[d]
+    assert len(I)==N//d
+    assert strata[d]=={x for x in R if ideal(math.gcd(x,N))==I and math.gcd(x,N)==d}
+    assert ann_set(I)==Id[N//d]
+    assert len(ann_set(I))==d
+    for x in strata[d]:
+        Rx={a*x%N for a in R}
+        Ax={a for a in R if a*x%N==0}
+        assert Rx==I
+        assert Ax==Id[N//d]
+        assert len(Ax)==d
+        assert len(Rx)*len(Ax)==N
+        # additive order of x
+        k=1
+        while k*x%N:
+            k+=1
+        assert k==N//d
+
+for d in D:
+    for e in D:
+        isum={(a+b)%N for a in Id[d] for b in Id[e]}
+        assert isum == Id[math.gcd(d,e)]
+        assert Id[d] & Id[e] == Id[math.lcm(d,e)]
+        prod={a*b%N for a in Id[d] for b in Id[e]}
+        assert prod==Id[math.gcd(d*e,N)]
+        assert ann_set(isum) == ann_set(Id[d]) & ann_set(Id[e])
+        anns_sum={(a+b)%N for a in ann_set(Id[d]) for b in ann_set(Id[e])}
+        assert ann_set(Id[d] & Id[e]) == anns_sum
+
+E_all={x for x in R if x*x%N==x}
+unitary=[d for d in D if math.gcd(d,N//d)==1]
+assert unitary==[1,5,8,9,40,45,72,360]
+idem_by_d={}
+for d in unitary:
+    cand=[e for e in E_all if math.gcd(e,N)==d]
+    assert len(cand)==1
+    idem_by_d[d]=cand[0]
+    e=cand[0]
+    assert Id[d]=={a*e%N for a in R}
+    assert math.gcd((1-e)%N,N)==N//d
+assert set(idem_by_d.values())==E_all
+
+# Additive character orthogonal complement: k is orthogonal to I_d iff k in I_{N/d}.
+for d in D:
+    I=Id[d]
+    ortho={k for k in R if all((k*x)%N==0 for x in I)}
+    assert ortho==Id[N//d]
+
 Nil={(30*j)%N for j in range(12)}
 assert len(Nil)==12
 assert {a*b%N for a in Nil for b in Nil}=={0,180}
 assert {a*b*c%N for a in Nil for b in Nil for c in Nil}=={0}
 Sq0={(60*j)%N for j in range(6)}
 assert all(a*b%N==0 for a in Sq0 for b in Sq0)
+
+# Jacobson radical / socle and maximal-minimal annihilator pairing.
+J=Id[30]
+Soc=Id[12]
+assert J==Nil
+assert ann_set(J)==Soc
+soc_sum={(a+b+c)%N for a in Id[180] for b in Id[120] for c in Id[72]}
+assert soc_sum==Soc
+for m,mini in ((2,180),(3,120),(5,72)):
+    assert ann_set(Id[m])==Id[mini]
+    assert ann_set(Id[mini])==Id[m]
 
 K={(1+30*j)%N for j in range(12)}
 assert K=={u for u in G if u%30==1}
@@ -122,6 +191,13 @@ assert {h*k%N for h in H for k in K}==set(G)
 payload={
   'modulus':360,
   'divisor_count':len(D),
+  'ideal_count':len(D),
+  'annihilator_pairs':[[d,N//d] for d in D if d<=N//d],
+  'direct_summand_ideal_divisors':unitary,
+  'idempotent_generators_by_ideal':{str(d):idem_by_d[d] for d in unitary},
+  'jacobson_radical_generator':30,
+  'socle_generator':12,
+  'maximal_minimal_annihilator_pairs':[[2,180],[3,120],[5,72]],
   'unit_count':len(G),
   'unit_order_counts':dict(sorted(Counter(order_mod(x) for x in G).items())),
   'unit_power_image_sizes':unit_sizes,

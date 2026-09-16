@@ -22,6 +22,13 @@ This register is the canonical overview. Detailed proofs, generated tables, or c
 | M360-016 | For unit-factor exponents \(e_i\), the possible residues of \(\prod p_i^{e_i}\) form \(G^\delta\), where \(\delta=\gcd(e_1,\dots,e_s,12)\) | `K + V360` | `E2 + E3` | group theorem + power images |
 | M360-017 | The GCD relation graph indexed by \(d\mid360\) has additive-Fourier eigenvalues \(c_{360/d}(k)\) | `K + V360` | `E3` | finite Fourier identity |
 | M360-018 | The fixed field of the square kernel is \(\mathbb Q(\zeta_9)^+\mathbb Q(\sqrt5)\), of degree 6, with quotient group \(C_6\) | `K + V360` | `E3` | CRT/Galois proof |
+| M360-019 | The ideals of \(R=\mathbb Z/360\mathbb Z\) are exactly \(I_d=(d)\) for \(d\mid360\); \(|I_d|=360/d\), \(R/I_d\cong\mathbb Z/d\mathbb Z\), and the ideal lattice is the reversed divisor box \(C_4\times C_3\times C_2\) | `K + V360` | `E2 + E3` | `data/ideal-lattice.csv` + proof |
+| M360-020 | The GCD shell \(C_d\) is exactly the set of elements generating the ideal \(I_d\). For \(x\in C_d\), \(\operatorname{Ann}(x)=I_{360/d}\), \(|\operatorname{Ann}(x)|=d\), and \(|Rx|\,|\operatorname{Ann}(x)|=360\) | `K + V360` | `E2 + E3` | exhaustive + elementary ideal proof |
+| M360-021 | \(\operatorname{Ann}(I_d)=I_{360/d}\); under the canonical additive character pairing, the Fourier orthogonal complement also satisfies \(I_d^\perp=I_{360/d}\) | `K + V360` | `E2 + E3` | exhaustive + character proof |
+| M360-022 | Ideal arithmetic is \(I_d+I_e=I_{\gcd(d,e)}\), \(I_d\cap I_e=I_{\operatorname{lcm}(d,e)}\), and \(I_dI_e=I_{\gcd(de,360)}\); annihilator duality exchanges sums and intersections | `K + V360` | `E2 + E3` | exhaustive + divisor proof |
+| M360-023 | Exactly 8 ideals are direct summands: those with \(\gcd(d,360/d)=1\). They are precisely the idempotent-generated ideals, and if \(e\) generates \(I_d\), then \(1-e\) generates \(\operatorname{Ann}(I_d)\) | `K + V360` | `E2 + E3` | exhaustive + CRT proof |
+| M360-024 | The Jacobson radical/nilradical is \(J=(30)\), its annihilator is the socle \((12)\), and the maximal ideals \((2),(3),(5)\) are annihilator-dual to the minimal nonzero ideals \((180),(120),(72)\) | `K + V360` | `E2 + E3` | exhaustive + finite-ring proof |
+| M360-025 | For every ordered pair \((x,y)\), if \(d=\gcd(x-y,360)\), then \(x-y\) generates \(I_d\), has additive order \(360/d\), and has annihilator size \(d\). Thus the 24 affine pair-relations are exactly the 24 ideal-generator shells of differences | `K + V360` | `E2 + E3` | exhaustive + M360-020 |
 
 ## Status rule
 

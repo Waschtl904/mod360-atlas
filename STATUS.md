@@ -21,13 +21,18 @@
 | `E3` | mathematical proof |
 | `E4` | independently reproduced or reviewed |
 
-## V1 Core
+## V2 Core
 
 The following layers are currently in the reproducible Core:
 
 - CRT decomposition modulo \(8,9,5\).
 - 24 GCD point strata.
 - 24 affine difference/relation strata.
+- complete 24-ideal lattice and annihilator involution.
+- identification of GCD shells with ideal-generator shells.
+- equality of ring annihilator and additive-Fourier orthogonal complement for the ideal lattice.
+- direct-summand/idempotent Boolean sublattice of size 8.
+- Jacobson-radical / socle and maximal/minimal annihilator pairing.
 - MOD-30 quotient and 12-fold nilpotent depth.
 - unit-group order statistics and power images.
 - square hexagon \(Q=U(360)^2\).
@@ -38,6 +43,8 @@ The following layers are currently in the reproducible Core:
 - composite exponent-gcd residue taxonomy.
 - additive Fourier diagonalization of GCD relation graphs.
 - sextic square-quotient/Frobenius field description.
+
+The deterministic certificate for this layer is `certificates/core-v2.json`.
 
 ## Preserved but not yet promoted
 

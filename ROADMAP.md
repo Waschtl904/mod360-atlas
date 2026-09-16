@@ -5,15 +5,18 @@
 - [x] repository structure and status system
 - [x] deterministic atlas generator
 - [x] exhaustive Core verifier
-- [x] claim registry expanded to 18 Core claims
+- [x] claim registry expanded to 25 Core claims
 - [x] novelty ledger separated from mathematical verification
 - [x] citation/contribution/security files retained
+- [x] CI line endings normalized for deterministic CSV regeneration
 
 ## Phase A — Complete static atlas
 
 - [x] generate all 360 residue rows with CRT, gcd, unit order, powers, regular/nilpotent tags
 - [x] generate all 24 GCD strata
-- [ ] add ideal/annihilator lattice table
+- [x] add ideal/annihilator lattice table
+- [x] identify the 24 GCD shells as ideal-generator shells
+- [x] connect ring annihilator duality with additive Fourier orthogonality
 - [ ] add compressed support-sector multiplication tables
 - [ ] add subgroup lattice of \(U(360)\)
 
@@ -36,13 +39,14 @@
 ## Phase D — Harmonic and graph structure
 
 - [x] GCD relation graphs and Ramanujan eigenvalues
+- [x] identify ideal annihilator with additive-character orthogonal complement
 - [ ] full 24x24 Bose–Mesner/intersection-number table
 - [ ] compare additive Fourier strata with multiplicative character strata
 - [ ] Gauss-sum bridge between additive and multiplicative characters
 
 ## Phase E — Discovery program
 
-- [ ] identify quantities not forced by CRT, the unit-group isomorphism type, or simple sieve admissibility
+- [ ] identify quantities not forced by CRT, the unit-group isomorphism type, ideal duality, or simple sieve admissibility
 - [ ] re-audit historical double-hexagon/affine/operator findings
 - [ ] run targeted prior-art searches only after a theorem is isolated
 
