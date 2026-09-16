@@ -1,0 +1,24 @@
+{
+  "checks": {
+    "integers_cross_checked": 1000000,
+    "least_factor_progressions": 15840,
+    "residue_rows": 360,
+    "semiprime_methods": 3,
+    "trial_division_integers": 10000
+  },
+  "independent_algorithms_not_independent_review": true,
+  "schema": "mod360-integer-census-certificate-v1",
+  "scope": {
+    "lower_inclusive": 1,
+    "modulus": 360,
+    "upper_inclusive": 1000000
+  },
+  "sha256": {
+    "data/integer-census-v1/least-factors.json": "43f738094e120814b3a62a80ce7022c68a7fb716ddbe2f08a8db76a8eeafe8db",
+    "data/integer-census-v1/residues.csv": "b493e8afff818042e27f97771ad1ee7032f595a5747f5b7baaedd6a8f26683df",
+    "data/integer-census-v1/summary.json": "ca5025843ec0a3c00add7b9a61356ed34b84b7d20f201788dc1886048078c687",
+    "exact/generate_integer_census.py": "0aad1fc1f95f7892a587646c40473ef7c6bd8eb07cead9ab996052ff5f5cd15b",
+    "exact/verify_integer_census.py": "90eddb72e33066cc6e8d11e3a9cf31f599868ccef5bf5968b8cccf4a8e045b04"
+  },
+  "status": "PASS"
+}

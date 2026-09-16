@@ -38,3 +38,16 @@ This register is the canonical overview. Detailed proofs, generated tables, or c
 ## Status rule
 
 `NH` means only “new in this investigation”. It is not a literature novelty claim. Promotion to `NEW` requires the separate process in `NOVELTY_LEDGER.md`.
+
+## Finite-window extension (separate from Core V3)
+
+These entries do not promote the historical operator candidates or change Core V3.
+The mathematical identities are classical elementary specializations; dataset
+counts assert only the explicitly bounded window. No independent external review
+(`E4`) or literature-novelty (`NEW`) claim is made.
+
+| ID | Statement | Status | Evidence | Reproduction / proof |
+|---|---|---|---|---|
+| M360-030 | In a unit MOD-360 column `n=r+360k`, the composites `2<=n<=X` are exactly the union over primes `5<p<=sqrt(X)` of `k=-r*360^-1 (mod p)` with `p^2<=n<=X`; processing primes increasingly gives the disjoint least-factor partition | `K + V360` | `E3`; `E2` at `X=10^6` | [proof](primes/integer-census-v1.md#3-m360-030-exact-composite-positions-inside-a-fixed-column), `exact/verify_integer_census.py` |
+| M360-031 | The census on positive integers `1..1000000` has 360 exactly verified rows: 78498 primes, 921501 composites, one exceptional integer 1, 210035 semiprimes, 607926 squarefree integers including 1; all categories and witnesses are defined in the dataset documentation | `V360` (finite dataset only) | `E2`, different algorithms; not `E4` | [data and conventions](primes/integer-census-v1.md#5-m360-031-measured-reference-window), `certificates/integer-census-v1.json` |
+| M360-032 | For a unit residue `r`, its semiprime count equals the sum over primes `5<p<=sqrt(X)` of `pi(floor(X/p);360,r*p^-1)-pi(p-1;360,r*p^-1)`, counting `p<=q` and including squares once | `K + V360` | `E3`; `E2` at `X=10^6` | [proof](primes/integer-census-v1.md#4-m360-032-an-exact-semiprime-counting-bridge), `exact/verify_integer_census.py` |
