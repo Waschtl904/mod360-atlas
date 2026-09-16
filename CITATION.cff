@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Wenn Sie dieses Forschungsrepository verwenden, zitieren Sie bitte den konkreten Release oder Commit."
+title: "mod360-atlas"
+type: dataset
+authors:
+  - family-names: "Waschtl904"
+repository-code: "https://github.com/Waschtl904/mod360-atlas"
+abstract: "Reproduzierbarer mathematischer Atlas der Restklassen modulo 360."
+license: "proprietary"
