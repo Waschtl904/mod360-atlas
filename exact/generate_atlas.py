@@ -89,10 +89,9 @@ with (DATA/'ideal-lattice.csv').open('w',newline='',encoding='utf-8') as f:
             'minimal_nonzero':int(d in (180,120,72)),
         })
 
-
 with (DATA/'shell-product.csv').open('w',newline='',encoding='utf-8') as f:
     fields=['d','e','target_d','source_pair_count','target_shell_size','fiber_size']
-    w=csv.DictWriter(f,fieldnames=fields); w.writeheader()
+    w=csv.DictWriter(f,fieldnames=fields,lineterminator='\n'); w.writeheader()
     for d in divs:
         for e in divs:
             g=math.gcd(d*e,N)
