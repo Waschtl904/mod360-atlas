@@ -19,3 +19,11 @@ For \(k\ge3\), the image size depends only on \(\gcd(k,12)\):
 The exceptional exponents 1 and 2 retain additional nilpotent information.
 
 A full functional-graph classification (cycles, trees, preperiods, fiber profiles) remains on the roadmap.
+
+## Review extension, 2026-09-16
+
+The [complete power atlas V1](power-atlas-v1.md) now supplies that classification
+as a separate review module: all 14 positive power maps, every edge/fiber/cycle,
+a local orbit formula, the universal two-step/two-cycle rule, and an exact
+prime-power counting bridge. Core V3 and the historical findings are not promoted
+or rewritten by this addition.

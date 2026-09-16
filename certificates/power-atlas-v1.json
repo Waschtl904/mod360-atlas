@@ -1,0 +1,34 @@
+{
+  "checks": {
+    "composition_vertex_checks": 70560,
+    "different_graphs_by_image_and_fixed_count": 14,
+    "maps": 14,
+    "nilpotent_square_exception_count": 90,
+    "prime_power_bound": 1000000,
+    "prime_power_pushforward_cells": 6480,
+    "proper_prime_power_witnesses": 236,
+    "unit_graph_types": 12,
+    "vertex_records": 5040
+  },
+  "expanded_atlas_sha256": "bbfb2ed1de9228edfdb585699b192a8aa2dfff408f44f44202c1f95a08a469ac",
+  "external_independent_review": false,
+  "idempotent_map_representatives": [
+    1,
+    4,
+    9,
+    12,
+    13
+  ],
+  "modulus": 360,
+  "schema": "mod360-power-atlas-certificate-v1",
+  "sha256": {
+    "data/power-atlas-v1/composition.csv": "f27eebfce925c95afb9d1fce9266b1c4ec02febb28c3cf412400688d039a02e3",
+    "data/power-atlas-v1/maps.csv": "3dfd4605539fd1d4fdeb5e5182490ffac3d60dbf3d8852b9d4d9c7965158f1ec",
+    "data/power-atlas-v1/prime-power-witnesses.csv": "43c180ba96577afcf85ad0eab50f95e00fda7a0d5ba8d9ab0975a6e94b521ae5",
+    "data/power-atlas-v1/prime-powers.csv": "bc5972360f0eb3826eb8322d5657251b34eba299438e7e7b67fef871afbac67d",
+    "data/power-atlas-v1/summary.csv": "c799d7b793cea542c74bfb11b294b53348a16248e0bec6ae60cbc67062c67dc1",
+    "exact/generate_power_atlas.py": "d4e9982ae172a3f7635f03cdf757ca01d237ac593645eae8ff7f3b5d6055662e",
+    "exact/verify_power_atlas.py": "98293a6b227c3be863fc0e5ee6b8ebd68f7477115a0ef7af0c925835c2c24b49"
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,20 @@
+name: power-atlas
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-power-atlas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python exact/generate_power_atlas.py --check
+      - run: python exact/verify_power_atlas.py --check
+      - run: git diff --exit-code -- data/power-atlas-v1 certificates/power-atlas-v1.json
