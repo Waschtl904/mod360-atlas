@@ -38,6 +38,14 @@ URLs:
 - https://doi.org/10.3934/amc.2014.8.191
 - https://arxiv.org/abs/1304.6589
 
+## Factorization and associates in Z/nZ
+
+Nicholas R. Baeth, Brandon Burns, James Mixco, **“A Fundamental Theorem of Modular Arithmetic”**, *Periodica Mathematica Hungarica* 75(2) (2017), 356–367. DOI: 10.1007/s10998-017-0205-0.
+
+Relevant points: in `Z/nZ`, two elements are associates exactly when they have the same gcd with `n`; prime/(strong) irreducible elements are exactly the associate classes of the prime divisors of `n`; and Corollary 3.5 classifies when a nonzero nonunit has unique irreducible factorization versus an infinite interval of possible factorization lengths. Therefore the shell/associate layer and M360-028--029 are classical specializations, not novelty claims. M360-026--027 are elementary consequences of this associate classification plus the transitive unit action and are also kept at `K + V360`.
+
+URL: https://doi.org/10.1007/s10998-017-0205-0
+
 ## To audit next
 
 - finite commutative regular semigroups / Clifford semigroups;

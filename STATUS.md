@@ -21,7 +21,7 @@
 | `E3` | mathematical proof |
 | `E4` | independently reproduced or reviewed |
 
-## V2 Core
+## V3 Core
 
 The following layers are currently in the reproducible Core:
 
@@ -43,8 +43,11 @@ The following layers are currently in the reproducible Core:
 - composite exponent-gcd residue taxonomy.
 - additive Fourier diagonalization of GCD relation graphs.
 - sextic square-quotient/Frobenius field description.
+- 24-shell multiplicative quotient monoid and uniform factorization fibers.
+- natural-prime versus ring-prime/irreducible firewall.
+- complete nonzero-shell irreducible factorization-length classification.
 
-The deterministic certificate for this layer is `certificates/core-v2.json`.
+The deterministic certificate for this layer is `certificates/core-v3.json`.
 
 ## Preserved but not yet promoted
 

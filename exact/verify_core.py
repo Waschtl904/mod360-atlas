@@ -7,7 +7,7 @@ from pathlib import Path
 
 N=360
 ROOT=Path(__file__).resolve().parents[1]
-CERT=ROOT/'certificates'/'core-v2.json'
+CERT=ROOT/'certificates'/'core-v3.json'
 
 def phi(m):
     return sum(math.gcd(a,m)==1 for a in range(1,m+1))
@@ -183,6 +183,46 @@ for a in range(1,13):
         rhs={pow(x,d,N) for x in G}
         assert lhs==rhs
 
+
+# Multiplicative quotient by unit/associate shells and uniform fibers.
+shell_fiber_values={}
+for d in D:
+    for e in D:
+        g=math.gcd(d*e,N)
+        counts=Counter((x*y)%N for x in strata[d] for y in strata[e])
+        assert set(counts)==strata[g]
+        expected=len(strata[d])*len(strata[e])//len(strata[g])
+        assert set(counts.values())=={expected}
+        shell_fiber_values[(d,e)]=(g,expected)
+
+# Ring-theoretic irreducibles: keep separate from ordinary integer primes.
+factor_pairs={z:[] for z in R}
+for a in R:
+    for b in R:
+        factor_pairs[a*b%N].append((a,b))
+
+def associates(a,b):
+    return math.gcd(a,N)==math.gcd(b,N)
+
+def is_irreducible(x):
+    if x==0 or x in G:
+        return False
+    return all(associates(x,a) or associates(x,b) for a,b in factor_pairs[x])
+
+def is_very_strong_irreducible(x):
+    if x==0 or x in G:
+        return False
+    return all(((a in G)+(b in G))==1 for a,b in factor_pairs[x])
+
+irreducibles={x for x in R if is_irreducible(x)}
+very_strong={x for x in R if is_very_strong_irreducible(x)}
+assert irreducibles==strata[2]|strata[3]|strata[5]
+assert very_strong==strata[2]|strata[3]
+assert len(irreducibles)==104 and len(very_strong)==80
+
+unique_factorization_shells=[d for d in D if d not in (1,N) and all((N//d)%p==0 for p in (2,3,5))]
+assert unique_factorization_shells==[2,3,4,6,12]
+
 H=subgroup([37,71])
 assert len(H)==8 and H&K=={1}
 assert {h%30 for h in H}==set(U30)
@@ -198,6 +238,11 @@ payload={
   'jacobson_radical_generator':30,
   'socle_generator':12,
   'maximal_minimal_annihilator_pairs':[[2,180],[3,120],[5,72]],
+  'shell_product_rule':'target_d=gcd(d*e,360)',
+  'shell_product_rows':len(D)*len(D),
+  'ring_prime_strata':[2,3,5],
+  'very_strong_irreducible_strata':[2,3],
+  'unique_irreducible_factorization_strata':unique_factorization_shells,
   'unit_count':len(G),
   'unit_order_counts':dict(sorted(Counter(order_mod(x) for x in G).items())),
   'unit_power_image_sizes':unit_sizes,

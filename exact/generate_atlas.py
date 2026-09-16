@@ -89,7 +89,43 @@ with (DATA/'ideal-lattice.csv').open('w',newline='',encoding='utf-8') as f:
             'minimal_nonzero':int(d in (180,120,72)),
         })
 
+
+with (DATA/'shell-product.csv').open('w',newline='',encoding='utf-8') as f:
+    fields=['d','e','target_d','source_pair_count','target_shell_size','fiber_size']
+    w=csv.DictWriter(f,fieldnames=fields); w.writeheader()
+    for d in divs:
+        for e in divs:
+            g=math.gcd(d*e,N)
+            sd=phi(N//d); se=phi(N//e); sg=phi(N//g)
+            w.writerow({
+                'd':d,'e':e,'target_d':g,
+                'source_pair_count':sd*se,'target_shell_size':sg,
+                'fiber_size':sd*se//sg,
+            })
+
+with (DATA/'ring-factorization-shells.csv').open('w',newline='',encoding='utf-8') as f:
+    fields=['d','shell_size','natural_prime_capable','ring_prime','strong_irreducible',
+            'very_strong_irreducible','omega_d','factorization_regime','length_set']
+    w=csv.DictWriter(f,fieldnames=fields); w.writeheader()
+    unique_shells={2,3,4,6,12}
+    for d in divs:
+        omega=vp(d,2)+vp(d,3)+vp(d,5)
+        if d==1:
+            regime='unit'; lengths='{0}'
+        elif d==N:
+            regime='zero-special'; lengths='special'
+        elif d in unique_shells:
+            regime='unique-up-to-associates'; lengths='{%d}'%omega
+        else:
+            regime='infinite-length-interval'; lengths='[%d,infinity)'%omega
+        w.writerow({
+            'd':d,'shell_size':phi(N//d),'natural_prime_capable':int(d==1),
+            'ring_prime':int(d in (2,3,5)),'strong_irreducible':int(d in (2,3,5)),
+            'very_strong_irreducible':int(d in (2,3)),'omega_d':omega,
+            'factorization_regime':regime,'length_set':lengths,
+        })
+
 units=[x for x in range(N) if math.gcd(x,N)==1]
 power={str(k):sorted({pow(x,k,N) for x in units}) for k in range(1,13)}
 (DATA/'unit-power-images.json').write_text(json.dumps(power,indent=2)+'\n',encoding='utf-8')
-print('generated residue/gcd/relation/ideal tables and unit-power-images.json')
+print('generated residue/gcd/relation/ideal/shell-factorization tables and unit-power-images.json')

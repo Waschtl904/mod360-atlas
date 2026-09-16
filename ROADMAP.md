@@ -5,7 +5,7 @@
 - [x] repository structure and status system
 - [x] deterministic atlas generator
 - [x] exhaustive Core verifier
-- [x] claim registry expanded to 25 Core claims
+- [x] claim registry expanded to 29 Core claims
 - [x] novelty ledger separated from mathematical verification
 - [x] citation/contribution/security files retained
 - [x] CI line endings normalized for deterministic CSV regeneration
@@ -17,7 +17,8 @@
 - [x] add ideal/annihilator lattice table
 - [x] identify the 24 GCD shells as ideal-generator shells
 - [x] connect ring annihilator duality with additive Fourier orthogonality
-- [ ] add compressed support-sector multiplication tables
+- [x] add 24x24 multiplicative GCD-shell product/fiber table
+- [ ] add compressed support-sector multiplication tables beyond GCD shells
 - [ ] add subgroup lattice of \(U(360)\)
 
 ## Phase B — Primes and composites
@@ -25,6 +26,7 @@
 - [x] MOD-30 wheel and 12 lifts
 - [x] exact admissibility formula for finite prime-offset patterns
 - [x] exponent-gcd classification of possible unit residues of factorizations
+- [x] exact residue-shell factorization baseline and ring-prime/irreducible firewall
 - [ ] prime-square, semiprime, squarefree, \(\omega\), and \(\Omega\) atlases
 - [ ] compare theoretical residue support with actual primes/semiprimes up to controlled cutoffs
 - [ ] build prime-gap relation atlas by \(\gcd(h,360)\)

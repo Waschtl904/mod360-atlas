@@ -27,8 +27,13 @@ This register is the canonical overview. Detailed proofs, generated tables, or c
 | M360-021 | \(\operatorname{Ann}(I_d)=I_{360/d}\); under the canonical additive character pairing, the Fourier orthogonal complement also satisfies \(I_d^\perp=I_{360/d}\) | `K + V360` | `E2 + E3` | exhaustive + character proof |
 | M360-022 | Ideal arithmetic is \(I_d+I_e=I_{\gcd(d,e)}\), \(I_d\cap I_e=I_{\operatorname{lcm}(d,e)}\), and \(I_dI_e=I_{\gcd(de,360)}\); annihilator duality exchanges sums and intersections | `K + V360` | `E2 + E3` | exhaustive + divisor proof |
 | M360-023 | Exactly 8 ideals are direct summands: those with \(\gcd(d,360/d)=1\). They are precisely the idempotent-generated ideals, and if \(e\) generates \(I_d\), then \(1-e\) generates \(\operatorname{Ann}(I_d)\) | `K + V360` | `E2 + E3` | exhaustive + CRT proof |
-| M360-024 | The Jacobson radical/nilradical is \(J=(30)\), its annihilator is the socle \((12)\), and the maximal ideals \((2),(3),(5)\) are annihilator-dual to the minimal nonzero ideals \((180),(120),(72)\) | `K + V360` | `E2 + E3` | exhaustive + finite-ring proof |
+| M360-024 | The Jacobson radical/nilradical is \(J=(30)\), its annihilator is the socle \((12)\), and the maximal ideals \((2),(3),(5)\) are annhhilator-dual to the minimal nonzero ideals \((180),(120),(72)\) | `K + V360` | `E2 + E3` | exhaustive + finite-ring proof |
 | M360-025 | For every ordered pair \((x,y)\), if \(d=\gcd(x-y,360)\), then \(x-y\) generates \(I_d\), has additive order \(360/d\), and has annihilator size \(d\). Thus the 24 affine pair-relations are exactly the 24 ideal-generator shells of differences | `K + V360` | `E2 + E3` | exhaustive + M360-020 |
+
+| M360-026 | The 24 GCD shells form the unit-orbit quotient monoid under multiplication: for `d,e|360`, `C_d C_e = C_g` with `g=gcd(de,360)`; in valuation coordinates this is capped addition | `K + V360` | `E2 + E3` | exhaustive + associate/CRT proof |
+| M360-027 | For `g=gcd(de,360)`, every `z in C_g` has the same number `phi(360/d) phi(360/e) / phi(360/g)` of ordered shell factorizations `z=xy`, `x in C_d`, `y in C_e`; the analogous r-factor formula follows by induction | `K + V360` | `E2 + E3` | exhaustive + transitive unit action |
+| M360-028 | Natural-prime capability and ring-theoretic primality are different: natural primes `>5` can occur only in `C_1`, while prime/(strong) irreducible elements of `R` are exactly `C_2 union C_3 union C_5`; very strong irreducibles are exactly `C_2 union C_3` | `K + V360` | `E2 + E3` | exhaustive + Baeth--Burns--Mixco |
+| M360-029 | For nonzero nonunits in `C_d`, irreducible factorization is unique up to associates/permutation exactly for `d in {2,3,4,6,12}`, with length `Omega(d)`; every other nonzero nonunit shell has length set `[Omega(d), infinity)` | `K + V360` | `E3` | specialization of Baeth--Burns--Mixco Cor. 3.5 |
 
 ## Status rule
 
