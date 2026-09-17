@@ -27,6 +27,10 @@ Q = frozenset((1, 49, 121, 169, 241, 289))
 A = frozenset(r for r in UNITS if r % 30 in (1, 19))
 H30 = frozenset((1, 19))
 
+VIEW_ORDER = (("cumulative", 0, 36_000), ("cumulative", 0, 360_000),
+              ("cumulative", 0, 3_600_000), ("interval", 0, 36_000),
+              ("interval", 36_000, 360_000), ("interval", 360_000, 3_600_000))
+
 EXPECTED = {
     ("cumulative", 0, 36_000): ("82/45", "37/18", "2/9"),
     ("cumulative", 0, 360_000): ("191/90", "4/3", "95/72"),
@@ -43,7 +47,6 @@ def require(ok: bool, message: str) -> None:
 
 
 def spf_table(limit: int) -> array:
-    """Smallest-prime-factor table for direct integer classification."""
     spf = array("I", [0]) * (limit + 1)
     for p in range(2, limit + 1):
         if spf[p] == 0:
@@ -68,17 +71,9 @@ def contrast(v: list[int]) -> tuple[str, str, str, tuple[int, int, int, int]]:
 
 
 def build_views() -> dict[tuple[str, int, int], dict[int, list[int]]]:
-    """Scan n once; classify n=p*q by its least prime p and prime cofactor q."""
     limit = BOUNDS[-1]
     spf = spf_table(limit)
-    views = {
-        ("cumulative", 0, 36_000): defaultdict(lambda: [0] * len(UNITS)),
-        ("cumulative", 0, 360_000): defaultdict(lambda: [0] * len(UNITS)),
-        ("cumulative", 0, 3_600_000): defaultdict(lambda: [0] * len(UNITS)),
-        ("interval", 0, 36_000): defaultdict(lambda: [0] * len(UNITS)),
-        ("interval", 36_000, 360_000): defaultdict(lambda: [0] * len(UNITS)),
-        ("interval", 360_000, 3_600_000): defaultdict(lambda: [0] * len(UNITS)),
-    }
+    views = {key: defaultdict(lambda: [0] * len(UNITS)) for key in VIEW_ORDER}
     for n in range(2, limit + 1):
         p = spf[n]
         q = n // p
@@ -109,19 +104,26 @@ def sum_vectors(rows: dict[int, list[int]], pred=lambda p: True) -> list[int]:
     return out
 
 
+def summary_filename(key: tuple[str, int, int]) -> str:
+    kind, lo, hi = key
+    return f"by-p-{kind}-{lo}-{hi}.csv"
+
+
 def read_committed_summary() -> dict[tuple[str, int, int], dict[int, tuple[str, ...]]]:
-    path = DATA / "by-p-summary.csv"
-    require(path.is_file(), "missing by-p-summary.csv")
     result = defaultdict(dict)
-    with path.open(newline="", encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            key = (row["kind"], int(row["lower_exclusive"]), int(row["upper_inclusive"]))
-            p = int(row["p"])
-            vals = (row["p_mod30"], row["total_units"], row["q_total"],
-                    row["a_minus_q_total"], row["u_minus_a_total"],
-                    row["delta"], row["delta_fine"], row["delta_coarse"])
-            require(p not in result[key], "duplicate p row")
-            result[key][p] = vals
+    for expected_key in VIEW_ORDER:
+        path = DATA / summary_filename(expected_key)
+        require(path.is_file(), f"missing {path.name}")
+        with path.open(newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                key = (row["kind"], int(row["lower_exclusive"]), int(row["upper_inclusive"]))
+                require(key == expected_key, f"wrong view in {path.name}: {key}")
+                p = int(row["p"])
+                vals = (row["p_mod30"], row["total_units"], row["q_total"],
+                        row["a_minus_q_total"], row["u_minus_a_total"],
+                        row["delta"], row["delta_fine"], row["delta_coarse"])
+                require(p not in result[key], "duplicate p row")
+                result[key][p] = vals
     return dict(result)
 
 
@@ -146,10 +148,7 @@ def expanded_bytes(views: dict) -> bytes:
     s = io.StringIO(newline="")
     w = csv.writer(s, lineterminator="\n")
     w.writerow(header)
-    order = (("cumulative", 0, 36_000), ("cumulative", 0, 360_000),
-             ("cumulative", 0, 3_600_000), ("interval", 0, 36_000),
-             ("interval", 36_000, 360_000), ("interval", 360_000, 3_600_000))
-    for key in order:
+    for key in VIEW_ORDER:
         kind, lo, hi = key
         for p in sorted(views[key]):
             vec = views[key][p]
@@ -157,16 +156,15 @@ def expanded_bytes(views: dict) -> bytes:
             w.writerow([kind, lo, hi, p, p % 30, t, q, amq, uma, d, fi, co, *vec])
     return s.getvalue().encode()
 
+
 def read_parent() -> dict[int, list[int]]:
     with PARENT.open(newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     require(len(rows) == 360, "parent row count")
     out = {}
     for b in BOUNDS:
-        out[b] = [
-            int(rows[r][f"semiprimes_{b}"]) - int(rows[r][f"prime_squares_{b}"])
-            for r in UNITS
-        ]
+        out[b] = [int(rows[r][f"semiprimes_{b}"]) - int(rows[r][f"prime_squares_{b}"])
+                  for r in UNITS]
     return out
 
 
@@ -177,13 +175,11 @@ def parent_window(parent: dict[int, list[int]], lo: int, hi: int) -> list[int]:
 def expected_diag_rows(views: dict) -> list[list[str]]:
     rows = views[("interval", 36_000, 360_000)]
     out = []
-
     def add(gt: str, name: str, pred=lambda p: True) -> None:
         ps = [p for p in rows if pred(p)]
         v = sum_vectors(rows, pred)
         d, f, c, (t, q, amq, uma) = contrast(v)
         out.append([gt, name, str(len(ps)), str(t), str(q), str(amq), str(uma), d, f, c])
-
     cut = isqrt(36_000)
     add("all", "middle interval")
     add("lower-bound regime", f"p<={cut}", lambda p: p <= cut)
@@ -196,14 +192,8 @@ def expected_diag_rows(views: dict) -> list[list[str]]:
             add("cross", an + " & " + fn, lambda p, a=apred, b=fpred: a(p) and b(p))
     for s in (1, 7, 11, 13, 17, 19, 23, 29):
         add("p mod30", str(s), lambda p, s=s: p % 30 == s)
-
-    # Product blocks are verified directly from the integer scan, not reconstructed
-    # from the whole middle interval.
     for lo in range(36_000, 360_000, 36_000):
         hi = lo + 36_000
-        block = defaultdict(lambda: [0] * len(UNITS))
-        # We can reuse the already-built interval views only if we know n; rebuild a
-        # local SPF scan for these diagnostic rows below in verify_diagnostics().
         out.append(["product block", f"({lo},{hi}]", "__DEFER__", "", "", "", "", "", "", ""])
     return out
 
@@ -219,8 +209,6 @@ def product_block_rows() -> dict[str, list[str]]:
         if p <= 5 or not (p < q) or spf[q] != q:
             continue
         lo = ((n - 1) // 36_000) * 36_000
-        if lo < 36_000:
-            continue
         name = f"({lo},{lo+36_000}]"
         blocks[name][p][UIDX[n % 360]] += 1
     out = {}
@@ -234,7 +222,7 @@ def product_block_rows() -> dict[str, list[str]]:
 def verify_diagnostics(views: dict) -> None:
     path = DATA / "middle-diagnostics.csv"
     with path.open(newline="", encoding="utf-8") as f:
-        committed = [row for row in csv.DictReader(f)]
+        committed = list(csv.DictReader(f))
     base_expected = expected_diag_rows(views)
     block = product_block_rows()
     require(len(committed) == len(base_expected), "diagnostic row count")
@@ -242,8 +230,7 @@ def verify_diagnostics(views: dict) -> None:
         prefix = [got["group_type"], got["group"]]
         require(prefix == exp[:2], f"diagnostic ordering/key mismatch: {prefix} != {exp[:2]}")
         if got["group_type"] == "product block":
-            vals = block[got["group"]]
-            exp = [got["group_type"], got["group"], *vals]
+            exp = [got["group_type"], got["group"], *block[got["group"]]]
         gotvals = [got["group_type"], got["group"], got["p_count"], got["total_units"],
                    got["q_total"], got["a_minus_q_total"], got["u_minus_a_total"],
                    got["delta"], got["delta_fine"], got["delta_coarse"]]
@@ -254,7 +241,9 @@ def verify_certificate(views: dict) -> None:
     with CERT.open(encoding="utf-8") as f:
         cert = json.load(f)
     require(cert["schema"] == "mod360-least-prime-factor-v1", "certificate schema")
-    for name in ("by-p-summary.csv", "middle-diagnostics.csv"):
+    expected_files = {summary_filename(key) for key in VIEW_ORDER} | {"middle-diagnostics.csv"}
+    require(set(cert["files"]) == expected_files, "certificate file set mismatch")
+    for name in sorted(expected_files):
         raw = (DATA / name).read_bytes()
         require(hashlib.sha256(raw).hexdigest() == cert["files"][name], f"hash mismatch {name}")
     expanded = expanded_bytes(views)
@@ -263,30 +252,25 @@ def verify_certificate(views: dict) -> None:
     require(sum(len(rows) for rows in views.values()) == cert["expanded_rows"],
             "expanded row count mismatch")
 
+
 def main() -> None:
     computed = build_views()
     committed = read_committed_summary()
     summary = computed_summary(computed)
     require(set(computed) == set(EXPECTED) == set(committed), "view keys mismatch")
     require(summary == committed, "per-p summary mismatch")
-
     parent = read_parent()
     for key in EXPECTED:
         v = sum_vectors(computed[key])
-        kind, lo, hi = key
+        _, lo, hi = key
         require(v == parent_window(parent, lo, hi), f"parent 96-vector mismatch: {key}")
         d, f, c, _ = contrast(v)
         require((d, f, c) == EXPECTED[key], f"aggregate contrast mismatch: {key}")
-
-    # Natural lower-bound split: p<=sqrt(lo) iff lo/p >= p for the middle window.
     require(isqrt(36_000) == 189 and 189 * 189 <= 36_000 < 190 * 190, "sqrt boundary")
     require(all(p <= 189 or p >= 191 for p in computed[("interval", 36_000, 360_000)]),
             "unexpected prime boundary")
-
     verify_diagnostics(computed)
     verify_certificate(computed)
-
-    # Mutation rejection: a single changed residue must alter the bound expanded table.
     key = ("interval", 36_000, 360_000)
     p = min(computed[key])
     mutated = {k: {pp: vv[:] for pp, vv in rows.items()} for k, rows in computed.items()}
@@ -294,7 +278,6 @@ def main() -> None:
     mutated[key][p][0] += 1
     require(hashlib.sha256(expanded_bytes(mutated)).hexdigest() != original_hash,
             "mutation test failed")
-
     print("LEAST-PRIME-FACTOR VERIFY: PASS")
 
 
