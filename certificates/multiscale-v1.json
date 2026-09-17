@@ -1,0 +1,32 @@
+{
+  "bounds": [
+    36000,
+    360000,
+    3600000
+  ],
+  "checks": {
+    "boundary_bounds": [
+      360,
+      720,
+      1080
+    ],
+    "comparison_rows": 36,
+    "fine_residual_entries": 3456,
+    "mutated_prime_count_rejected": true,
+    "non_block_bound_rejected": true,
+    "raw_count_cells": 4320,
+    "trial_division_bound": 10000
+  },
+  "expanded_sha256": "481880bcd259e2bbdc6cfc9337674e36dabb03c43337c3b769ec7afd1d979da4",
+  "independent_external_review": false,
+  "interval_convention": "lower exclusive, upper inclusive",
+  "modulus": 360,
+  "schema": "mod360-multiscale-certificate-v1",
+  "sha256": {
+    "data/multiscale-v1/comparisons.csv": "7cb7bace95151fac517c3cc225693889513df43c02d06e20fa8b2e9e89a9c300",
+    "data/multiscale-v1/counts.csv": "1e57f8d223814b3d56e1f95859888f5a59eb9d2d789a43eba275b5162c72dbc3",
+    "exact/generate_multiscale.py": "91fb0d7cddc103670e461734cca9d8a4629f9b323ece555606561a4dc0f41299",
+    "exact/verify_multiscale.py": "b12db3ba627355b8e082abe6b643a9dc187dd616eed7e82196af338fa1c84e77"
+  },
+  "status": "PASS"
+}
