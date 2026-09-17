@@ -45,7 +45,7 @@ Der Verifier importiert keinen Generatorcode. Er prüft:
 4. `Q`, `A\Q`, `U\A` jeder Zeile;
 5. die natürliche Schranke `sqrt(36000)` im mittleren Fenster;
 6. sämtliche Mittelintervall-Diagnosen;
-7. SHA-256 der kompakten Datentabellen und des vollständigen 96-Klassen-Exports;
+7. SHA-256 der sechs kompakten `p`-Tabellen, der Diagnosetabelle und des vollständigen 96-Klassen-Exports;
 8. einen gezielten Mutationstest.
 
 ## Zuerst angreifen
