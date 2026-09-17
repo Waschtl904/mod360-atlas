@@ -31,6 +31,10 @@ Q = frozenset({1, 49, 121, 169, 241, 289})
 A = frozenset(r for r in UNITS if r % 30 in (1, 19))
 H30 = frozenset((1, 19))
 
+VIEW_ORDER = (("cumulative", 0, 36_000), ("cumulative", 0, 360_000),
+              ("cumulative", 0, 3_600_000), ("interval", 0, 36_000),
+              ("interval", 36_000, 360_000), ("interval", 360_000, 3_600_000))
+
 EXPECTED = {
     ("cumulative", 0, 36_000): ("82/45", "37/18", "2/9"),
     ("cumulative", 0, 360_000): ("191/90", "4/3", "95/72"),
@@ -76,7 +80,6 @@ def rows_for_window(primes: list[int], lo: int, hi: int) -> dict[int, list[int]]
             continue
         if p * p >= hi:
             break
-        # q>p, lo < p*q <= hi.
         left = bisect.bisect_right(primes, max(p, lo // p))
         right = bisect.bisect_right(primes, hi // p)
         if left >= right:
@@ -133,7 +136,7 @@ def parent_window(parent: dict[int, list[int]], lo: int, hi: int) -> list[int]:
 
 def check_parent(views: dict, parent: dict[int, list[int]]) -> None:
     for key, rows in views.items():
-        kind, lo, hi = key
+        _, lo, hi = key
         total = sum_vectors(rows)
         require(total == parent_window(parent, lo, hi),
                 f"full 96-class vector mismatch against multiscale-v1: {key}")
@@ -151,7 +154,7 @@ def csv_bytes(header: list[str], rows: list[list[object]]) -> bytes:
     return s.getvalue().encode()
 
 
-def render_by_p(views: dict, include_residues: bool) -> bytes:
+def render_by_p(views: dict, include_residues: bool, keys=VIEW_ORDER) -> bytes:
     header = [
         "kind", "lower_exclusive", "upper_inclusive", "p", "p_mod30",
         "total_units", "q_total", "a_minus_q_total", "u_minus_a_total",
@@ -160,9 +163,7 @@ def render_by_p(views: dict, include_residues: bool) -> bytes:
     if include_residues:
         header += [f"r{r:03d}" for r in UNITS]
     body = []
-    for key in (("cumulative", 0, 36_000), ("cumulative", 0, 360_000),
-                ("cumulative", 0, 3_600_000), ("interval", 0, 36_000),
-                ("interval", 36_000, 360_000), ("interval", 360_000, 3_600_000)):
+    for key in keys:
         kind, lo, hi = key
         for p in sorted(views[key]):
             vec = views[key][p]
@@ -173,6 +174,12 @@ def render_by_p(views: dict, include_residues: bool) -> bytes:
                 row += vec
             body.append(row)
     return csv_bytes(header, body)
+
+
+def summary_filename(key: tuple[str, int, int]) -> str:
+    kind, lo, hi = key
+    return f"by-p-{kind}-{lo}-{hi}.csv"
+
 
 def diag_row(group_type: str, group: str, rows: dict[int, list[int]],
              predicate=lambda p: True) -> list[object]:
@@ -186,8 +193,7 @@ def render_middle_diagnostics(views: dict, primes: list[int]) -> bytes:
     key = ("interval", 36_000, 360_000)
     rows = views[key]
     body = [diag_row("all", "middle interval", rows)]
-
-    cut = isqrt(36_000)  # 189; next prime is 191.
+    cut = isqrt(36_000)
     body += [
         diag_row("lower-bound regime", f"p<={cut}", rows, lambda p: p <= cut),
         diag_row("lower-bound regime", f"p>{cut}", rows, lambda p: p > cut),
@@ -204,13 +210,10 @@ def render_middle_diagnostics(views: dict, primes: list[int]) -> bytes:
                                  lambda p, a=active, b=fam: a(p) and b(p)))
     for s in (1, 7, 11, 13, 17, 19, 23, 29):
         body.append(diag_row("p mod30", str(s), rows, lambda p, s=s: p % 30 == s))
-
-    # Natural 36,000-wide product blocks partition the middle interval.
     for lo in range(36_000, 360_000, 36_000):
         hi = lo + 36_000
         block = rows_for_window(primes, lo, hi)
         body.append(diag_row("product block", f"({lo},{hi}]", block))
-
     return csv_bytes(
         ["group_type", "group", "p_count", "total_units", "q_total",
          "a_minus_q_total", "u_minus_a_total", "delta", "delta_fine", "delta_coarse"],
@@ -237,6 +240,7 @@ def certificate(tables: dict[str, bytes], expanded: bytes, expanded_rows: int) -
     }
     return (json.dumps(payload, sort_keys=True, indent=2) + "\n").encode()
 
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     mode = ap.add_mutually_exclusive_group()
@@ -244,20 +248,15 @@ def main() -> None:
     mode.add_argument("--write", action="store_true")
     mode.add_argument("--export", type=Path)
     args = ap.parse_args()
-
     primes = primes_upto(BOUNDS[-1])
     views = all_views(primes)
     parent = read_parent_vectors()
     check_parent(views, parent)
-
-    summary = render_by_p(views, include_residues=False)
     expanded = render_by_p(views, include_residues=True)
-    tables = {
-        "by-p-summary.csv": summary,
-        "middle-diagnostics.csv": render_middle_diagnostics(views, primes),
-    }
+    tables = {summary_filename(key): render_by_p(views, include_residues=False, keys=(key,))
+              for key in VIEW_ORDER}
+    tables["middle-diagnostics.csv"] = render_middle_diagnostics(views, primes)
     cert = certificate(tables, expanded, sum(len(rows) for rows in views.values()))
-
     if args.export is not None:
         args.export.mkdir(parents=True, exist_ok=True)
         for name, data in tables.items():
