@@ -1,0 +1,21 @@
+name: least-prime-factor
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-least-prime-factor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python exact/generate_multiscale.py --check
+      - run: python exact/generate_least_prime_factor.py --check
+      - run: python exact/verify_least_prime_factor.py
+      - run: git diff --exit-code -- data/least-prime-factor-v1 certificates/least-prime-factor-v1.json
