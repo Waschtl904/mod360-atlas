@@ -189,9 +189,9 @@ informativer als eine bloße Unterteilung der Produktachse.
 
 ## 8. Daten und unabhängige Gegenprüfung
 
-`data/least-prime-factor-v1/by-p-summary.csv` enthält für jede tatsächlich
-auftretende `p`-Schicht und jede der sechs Ansichten `Q`, `A\Q`, `U\A` sowie
-`Delta`, `Delta_fine`, `Delta_coarse`. Die vollständigen **96** Beiträge pro
+`data/least-prime-factor-v1/by-p-*.csv` enthält die 864 tatsächlich
+auftretenden `p`-Schichten, getrennt nach den sechs Referenzansichten, mit
+`Q`, `A\Q`, `U\A` sowie `Delta`, `Delta_fine`, `Delta_coarse`. Die vollständigen **96** Beiträge pro
 `p` werden deterministisch als `by-p-residues.csv` exportiert und ihr SHA-256
 ist im Zertifikat gebunden:
 
